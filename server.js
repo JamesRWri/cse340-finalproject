@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import vehicleRoutes from './routes/vehicleRoutes.js';
+import reviewRoute from './routes/reviewroute.js';
 
 dotenv.config();
 
@@ -17,7 +18,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+    res.locals.loggedin = true; // Set to false to test out logged-out view
+    res.locals.accountData = { account_id: 1, account_firstname: "James", account_lastname: "User" };
+    res.locals.messages = {};
+    next();
+});
+
 app.use('/vehicles', vehicleRoutes);
+app.use('/review', reviewRoute)
 
 app.get('/', (req, res) => {
     res.redirect('/vehicles/inventory');

@@ -10,6 +10,8 @@
         .vehicle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .vehicle-card { background: #fff; border: 3px solid #000; box-shadow: 5px 5px 0px #000; padding: 1.25rem; display: flex; flex-direction: column; }
         .vehicle-title { font-size: 1.25rem; font-weight: bold; margin: 0 0 0.5rem 0; }
+        .vehicle-title a { color: #000; text-decoration: underline; }
+        .vehicle-title a:hover { color: #0055cc; }
         .vehicle-price { font-size: 1.5rem; color: #081437; font-weight: bold; margin: 0.5rem 0; }
         .tag { display: inline-block; padding: 0.25rem 0.5rem; border: 1px solid #000; font-size: 0.8rem; font-weight: bold; background: #eee; margin-right: 0.5rem; }
         .status-badge { background: #e0f2fe; color: #0369a1; }
@@ -26,7 +28,9 @@
         <div class="vehicle-grid">
             <% vehicleList.forEach(function(car) { %>
                 <div class="vehicle-card">
-                    <div class="vehicle-title"><%= car.title %></div>
+                    <div class="vehicle-title">
+                        <a href="/vehicles/detail/<%= car.id || car.inv_id %>"><%= car.title %></a>
+                    </div>
                     <div>
                         <span class="tag"><%= car.category %></span>
                         <span class="tag"><%= car.mileage %></span>

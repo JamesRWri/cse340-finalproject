@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= car.inv_make %> <%= car.inv_model %> | Details</title>
+    <style>
+        body { font-family: sans-serif; background-color: #fafafa; padding: 2rem; color: #000; }
+        header { border-bottom: 3px solid #000; padding-bottom: 1rem; margin-bottom: 2rem; }
+        .back-link { display: inline-block; margin-bottom: 1rem; color: #0055cc; font-weight: bold; text-decoration: none; }
+        .detail-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; border: 3px solid #000; box-shadow: 5px 5px 0px #000; padding: 2rem; background: #fff; max-width: 900px; }
+        .vehicle-image { width: 100%; border: 3px solid #000; min-height: 250px; background-color: #eee; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .vehicle-price { font-size: 2rem; color: #081437; font-weight: bold; margin: 1rem 0; }
+        .specs-list { list-style: none; padding: 0; margin: 1rem 0; }
+        .specs-list li { padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+        .review-section { margin-top: 3rem; max-width: 900px; }
+        .review-form-wrapper { padding: 1.5rem; border: 3px solid #000; box-shadow: 5px 5px 0px #000; background: #fff; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dealership Management System</h1>
+        <p>Active Model View Controller Architecture Preview Sandbox</p>
+    </header>
+
+    <main>
+        <a href="/vehicles/inventory" class="back-link">&larr; Back to Inventory</a>
+
+        <div class="detail-container">
+            <div>
+                <div class="vehicle-image">
+                    [ Vehicle Image Placeholder ]
+                </div>
+            </div>
+            <div>
+                <h2 style="margin-top: 0;"><%= car.inv_year %> <%= car.inv_make %> <%= car.inv_model %></h2>
+                <div class="vehicle-price">$<%= car.inv_price.toLocaleString() %></div>
+                
+                <p><strong>Description:</strong> <%= car.inv_description %></p>
+                
+                <ul class="specs-list">
+                    <li><strong>Mileage:</strong> <%= car.inv_miles.toLocaleString() %> miles</li>
+                    <li><strong>Color:</strong> <%= car.inv_color %></li>
+                </li>
+            </div>
+        </div>
+
+        <section class="review-section">
+            <% if (locals.loggedin) { %>
+                <div class="review-form-wrapper">
+                    <h3 style="margin-top: 0;">Submit a Customer Review</h3>
+                    
+                    <% if (locals.messages && locals.messages.notice) { %>
+                        <div class="notice" style="color: #d32f2f; background: #ffebee; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; border: 1px solid #d32f2f;">
+                            <%= locals.messages.notice %>
+                        </div>
+                    <% } %>
+
+                    <form action="/review/add" method="POST" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div>
+                            <label for="reviewText" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Your Review:</label>
+                            <textarea id="reviewText" name="reviewText" rows="4" required style="width: 100%; padding: 0.5rem; border: 2px solid #000; box-sizing: border-box; font-family: sans-serif;"></textarea>
+                        </div>
+
+                        <input type="hidden" name="invId" value="<%= car.inv_id %>">
+                        <input type="hidden" name="accountId" value="<%= locals.accountData.account_id %>">
+
+                        <button type="submit" style="align-self: flex-start; padding: 0.75rem 1.5rem; background-color: #000; color: #fff; border: none; cursor: pointer; font-weight: bold; box-shadow: 3px 3px 0px #555;">
+                            Submit Review
+                        </button>
+                    </form>
+                </div>
+            <% } else { %>
+                <div class="review-login-prompt" style="padding: 1rem; background-color: #e5e7eb; border: 2px solid #000; font-weight: bold;">
+                    <p style="margin: 0;">Please <a href="/account/login" style="color: #0055cc; text-decoration: underline;">log in</a> to leave a review for this vehicle.</p>
+                </div>
+            <% } %>
+        </section>
+    </main>
+</body>
+</html>

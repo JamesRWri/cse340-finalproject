@@ -1,11 +1,13 @@
-const pool = require("../database/")
+import pool from "../database/index.js"
 
 async function addReview(reviewText, invId, accountId) {
   try {
     const sql = "INSERT INTO public.reviews (review_text, inv_id, account_id) VALUES ($1, $2, $3) RETURNING *"
-    return await pool.query(sql, [reviewText, invId, accountId])
+    const result = await pool.query(sql, [reviewText, invId, accountId])
+    return result.rows[0] 
   } catch (error) {
-    return error.message
+    console.error("model error: " + error)
+    return null
   }
 }
 
@@ -15,7 +17,8 @@ async function getReviewsByInvId(invId) {
     const data = await pool.query(sql, [invId])
     return data.rows
   } catch (error) {
-    return error.message
+    console.error("model error: " + error)
+    return []
   }
 }
 
@@ -25,11 +28,12 @@ async function getReviewsByAccountId(accountId) {
     const data = await pool.query(sql, [accountId])
     return data.rows
   } catch (error) {
-    return error.message
+    console.error("model error: " + error)
+    return []
   }
 }
 
-module.exports = {
+export default {
   addReview,
   getReviewsByInvId,
   getReviewsByAccountId

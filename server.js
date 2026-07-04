@@ -30,9 +30,24 @@ app.get('/', (req, res) => {
     res.redirect('/vehicles/inventory');
 });
 
+app.use((req, res, next) => {
+    const err = new Error("The requested vehicle resource or page could not be found.");
+    err.status = 404;
+    next(err);
+});
+
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something failed inside the dealership server routing system.');
+    const status = err.status || 500;
+    console.error(`[Error ${status}]: ${err.message}`);
+    
+    res.status(status).send(`
+        <div style="font-family: sans-serif; padding: 3rem; text-align: center;">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Error ${status}</h1>
+            <p style="font-size: 1.25rem; color: #555;">${err.message || 'Something failed inside the dealership server.'}</p>
+            <hr style="max-width: 400px; margin: 2rem auto; border: 1px solid #eee;">
+            <a href="/vehicles/inventory" style="color: #000; font-weight: bold; text-decoration: underline;">Return to Main Lot Inventory</a>
+        </div>
+    `);
 });
 
 const PORT = process.env.PORT || 3000;

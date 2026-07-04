@@ -2,8 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import vehicleRoutes from './routes/vehicleRoutes.js';
-import reviewRoute from './routes/reviewroute.js';
+import masterRouter from './routes/index.js';
 
 dotenv.config();
 
@@ -25,8 +24,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/vehicles', vehicleRoutes);
-app.use('/review', reviewRoute)
+app.use(masterRouter);
 
 app.get('/', (req, res) => {
     res.redirect('/vehicles/inventory');

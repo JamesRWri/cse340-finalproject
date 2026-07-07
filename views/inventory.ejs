@@ -14,7 +14,7 @@
         .vehicle-title a:hover { color: #0055cc; }
         .vehicle-price { font-size: 1.5rem; color: #081437; font-weight: bold; margin: 0.5rem 0; }
         .tag { display: inline-block; padding: 0.25rem 0.5rem; border: 1px solid #000; font-size: 0.8rem; font-weight: bold; background: #eee; margin-right: 0.5rem; }
-        .status-badge { background: #e0f2fe; color: #0369a1; }
+        .status-badge { background: #e0f2fe; color: #0369a1; padding: 0.1rem 0.3rem; }
     </style>
 </head>
 <body>
@@ -29,15 +29,17 @@
             <% vehicleList.forEach(function(car) { %>
                 <div class="vehicle-card">
                     <div class="vehicle-title">
-                        <a href="/vehicles/detail/<%= car.id || car.inv_id %>"><%= car.title %></a>
+                        <a href="/vehicles/detail/<%= car.inv_id %>">
+                            <%= car.inv_year %> <%= car.inv_make %> <%= car.inv_model %>
+                        </a>
                     </div>
                     <div>
-                        <span class="tag"><%= car.category %></span>
-                        <span class="tag"><%= car.mileage %></span>
+                        <span class="tag"><%= car.category || 'Vehicle' %></span>
+                        <span class="tag"><%= (car.inv_miles || car.mileage || 0).toLocaleString() %> miles</span>
                     </div>
-                    <div class="vehicle-price">$<%= car.price.toLocaleString() %></div>
+                    <div class="vehicle-price">$<%= (car.inv_price || car.price || 0).toLocaleString() %></div>
                     <div style="margin-top: auto; font-size: 0.85rem;">
-                        Status: <strong class="status-badge"><%= car.status %></strong>
+                        Status: <strong class="status-badge"><%= car.status || 'Available' %></strong>
                     </div>
                 </div>
             <% }); %>

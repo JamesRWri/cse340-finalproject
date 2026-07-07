@@ -41,7 +41,7 @@
                 <ul class="specs-list">
                     <li><strong>Mileage:</strong> <%= car.inv_miles.toLocaleString() %> miles</li>
                     <li><strong>Color:</strong> <%= car.inv_color %></li>
-                </li>
+                </ul>
             </div>
         </div>
 
@@ -75,6 +75,39 @@
                     <p style="margin: 0;">Please <a href="/account/login" style="color: #0055cc; text-decoration: underline;">log in</a> to leave a review for this vehicle.</p>
                 </div>
             <% } %>
+
+            <div class="existing-reviews" style="margin-top: 2.5rem;">
+                <h3 style="border-bottom: 2px solid #000; padding-bottom: 0.5rem;">Customer Reviews</h3>
+                
+                <% if (reviews && reviews.length > 0) { %>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <% reviews.forEach(review => { %>
+                            <li style="background: #fff; border: 3px solid #000; box-shadow: 4px 4px 0px #000; padding: 1.25rem; margin-bottom: 1.5rem;">
+                                <p style="margin: 0 0 0.5rem 0; font-weight: bold;">
+                                    <%= review.account_firstname %> <%= review.account_lastname %> 
+                                    <span style="font-weight: normal; color: #555; font-size: 0.85rem; margin-left: 0.5rem;">
+                                        on <%= new Date(review.review_date).toLocaleDateString() %>
+                                    </span>
+                                </p>
+                                <p style="margin: 0 0 1rem 0; font-style: italic; line-height: 1.5;">"<%= review.review_text %>"</p>
+
+                                <% if (locals.loggedin && (Number(locals.accountData.account_id) === Number(review.account_id) || locals.accountData.account_role === 'Employee' || locals.accountData.account_role === 'Owner')) { %>
+                                    <form action="/review/delete" method="POST" onsubmit="return confirm('Are you sure you want to permanently remove this review?');">
+                                        <input type="hidden" name="review_id" value="<%= review.review_id %>">
+                                        <input type="hidden" name="account_id" value="<%= review.account_id %>">
+                                        <input type="hidden" name="inv_id" value="<%= car.inv_id %>">
+                                        <button type="submit" style="background: #fee2e2; color: #991b1b; border: 2px solid #000; padding: 0.25rem 0.75rem; font-weight: bold; cursor: pointer; box-shadow: 2px 2px 0px #000;">
+                                            Delete Review
+                                        </button>
+                                    </form>
+                                <% } %>
+                            </li>
+                        <% }) %>
+                    </ul>
+                <% } else { %>
+                    <p style="font-style: italic; color: #555;">No customer reviews submitted for this vehicle yet.</p>
+                <% } %>
+            </div>
         </section>
     </main>
 </body>

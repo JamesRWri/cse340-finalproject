@@ -1,10 +1,10 @@
-import express from "express"
-import reviewController from "../controllers/review-controller.js"
+import express from 'express';
+import reviewController from '../controllers/review-controller.js';
 
-const router = new express.Router()
+const router = express.Router();
 
-router.post("/add", reviewController.addReview)
+router.post('/add', reviewController.addReview);
 
-router.post("/delete", reviewController.deleteReview)
+router.post('/delete', reviewController.deleteReview);
 
-export default router
+export default router;

@@ -26,8 +26,20 @@ app.use((req, res, next) => {
         account_role: "Owner" 
     };
     
+    req._mockFlashes = req._mockFlashes || {};
+
+    req.flash = function(type, message) {
+        if (message) {
+            req._mockFlashes[type] = message;
+        } else {
+            const val = req._mockFlashes[type];
+            delete req._mockFlashes[type];
+            return val || '';
+        }
+    };
+
     res.locals.messages = {
-        notice: req.flash ? req.flash('notice') : []
+        notice: req.flash('notice')
     };
     next();
 });
@@ -58,7 +70,7 @@ app.use((err, req, res, next) => {
     `);
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
     console.log(`Dealership management server actively listening on port ${PORT}`);
 });

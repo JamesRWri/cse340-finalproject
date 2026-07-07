@@ -18,17 +18,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
-    res.locals.loggedin = true; // Set to false to test out logged-out view
-    res.locals.accountData = { account_id: 1, account_firstname: "James", account_lastname: "User" };
-    res.locals.messages = {};
+    res.locals.loggedin = true;
+    res.locals.accountData = { 
+        account_id: 1, 
+        account_firstname: "James", 
+        account_lastname: "User",
+        account_role: "Owner" 
+    };
+    
+    res.locals.messages = {
+        notice: req.flash ? req.flash('notice') : []
+    };
     next();
 });
-
-app.use(masterRouter);
 
 app.get('/', (req, res) => {
     res.redirect('/vehicles/inventory');
 });
+
+app.use(masterRouter);
 
 app.use((req, res, next) => {
     const err = new Error("The requested vehicle resource or page could not be found.");

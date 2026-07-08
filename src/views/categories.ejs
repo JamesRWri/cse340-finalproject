@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <main>
+    <h1>Vehicle Categories</h1>
+
+    <% if (messages && messages.notice) { %>
+      <div class="notice-message"><%= messages.notice %></div>
+    <% } %>
+
+    <div class="form-container" style="margin-bottom: 2rem; max-width: 100%;">
+      <form action="/category/add" method="POST" class="account-form" style="flex-direction: row; gap: 1rem; align-items: flex-end;">
+        <div style="flex-grow: 1;">
+          <label for="classification_name">Add New Category:</label>
+          <input type="text" id="classification_name" name="classification_name" required placeholder="e.g., Electric, Hybrid" style="margin-bottom: 0; width: 100%; box-sizing: border-box;">
+        </div>
+        <button type="submit" style="padding: 0.75rem 1.5rem; white-space: nowrap;">Add Category</button>
+      </form>
+    </div>
+
+    <div class="form-container" style="max-width: 100%; padding: 1.5rem;">
+      <h2>Current Classifications</h2>
+      <% if (categories && categories.length > 0) { %>
+        <ul style="list-style-type: none; padding: 0; display: flex; flex-wrap: wrap; gap: 1rem;">
+          <% categories.forEach(category => { %>
+            <li style="background: #e1e4e6; padding: 0.5rem 1rem; border-radius: var(--border-radius); font-weight: bold; color: var(--primary-color);">
+              <%= category.classification_name %>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p>No vehicle categories found.</p>
+      <% } %>
+    </div>
+  </main>
+
+</body>
+</html>

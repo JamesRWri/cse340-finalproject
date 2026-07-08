@@ -1,19 +1,25 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import masterRouter from './routes/index.js';
+import morgan from 'morgan';
+
+import baseRoute from './src/routes/baseRoute.js';
+import vehicleRoute from './src/routes/vehicleRoute.js';
+import categoryRoute from './src/routes/categoryRoute.js';
+import accountRoute from './src/routes/accountRoute.js';
+import reviewRoute from './src/routes/reviewRoute.js';
+import adminRoute from './src/routes/adminRoute.js';
+import contactRoute from './src/routes/contactRoute.js';
+import serviceRoute from './src/routes/serviceRoute.js';
 
 dotenv.config();
 
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', './src/views');
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(morgan('dev'));
+app.use(express.static('./public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -44,11 +50,14 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', (req, res) => {
-    res.redirect('/vehicles/inventory');
-});
-
-app.use(masterRouter);
+app.use('/', baseRoute);
+app.use('/vehicles', vehicleRoute);
+app.use('/categories', categoryRoute);
+app.use('/account', accountRoute);
+app.use('/reviews', reviewRoute);
+app.use('/admin', adminRoute);
+app.use('/contact', contactRoute);
+app.use('/service', serviceRoute);
 
 app.use((req, res, next) => {
     const err = new Error("The requested vehicle resource or page could not be found.");

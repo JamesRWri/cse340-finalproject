@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <main>
+    <h1>Inventory Management</h1>
+
+    <% if (messages && messages.notice) { %>
+      <div class="notice-message"><%= messages.notice %></div>
+    <% } %>
+
+    <p><a href="/admin/add-vehicle" style="font-weight: bold;">+ Add New Vehicle</a></p>
+
+    <div class="form-container" style="max-width: 100%; padding: 1.5rem;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--primary-color);">
+            <th style="padding: 0.5rem;">Vehicle</th>
+            <th style="padding: 0.5rem;">Price</th>
+            <th style="padding: 0.5rem;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (vehicles && vehicles.length > 0) { %>
+            <% vehicles.forEach(vehicle => { %>
+              <tr style="border-bottom: 1px solid #e1e4e6;">
+                <td style="padding: 0.75rem;"><%= vehicle.inv_year %> <%= vehicle.inv_make %> <%= vehicle.inv_model %></td>
+                <td style="padding: 0.75rem;">$<%= Number(vehicle.inv_price).toLocaleString() %></td>
+                <td style="padding: 0.75rem;">
+                  <a href="/admin/edit-vehicle/<%= vehicle.inv_id %>" style="color: var(--accent-color); font-weight: bold;">Edit</a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="3" style="padding: 1rem; text-align: center;">No vehicles found in database.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <main>
+    <h1>Global Shop Tickets Management</h1>
+    <p><a href="/admin" style="font-weight: bold;">← Return to Admin Panel</a></p>
+
+    <% if (messages && messages.notice) { %>
+      <div class="notice-message"><%= messages.notice %></div>
+    <% } %>
+
+    <div class="form-container" style="max-width: 100%; padding: 1.5rem;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--primary-color);">
+            <th style="padding: 0.5rem;">Client</th>
+            <th style="padding: 0.5rem;">Vehicle</th>
+            <th style="padding: 0.5rem;">Logged Date</th>
+            <th style="padding: 0.5rem;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (requests && requests.length > 0) { %>
+            <% requests.forEach(ticket => { %>
+              <tr style="border-bottom: 1px solid #e1e4e6;">
+                <td style="padding: 0.75rem;"><%= ticket.account_firstname %> <%= ticket.account_lastname %></td>
+                <td style="padding: 0.75rem;"><%= ticket.service_vehicle_info %></td>
+                <td style="padding: 0.75rem; font-size: 0.9rem;"><%= new Date(ticket.service_date).toLocaleDateString() %></td>
+                <td style="padding: 0.75rem;"><span style="color: var(--accent-color); font-weight: bold;"><%= ticket.service_status %></span></td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="4" style="padding: 1rem; text-align: center;">No dynamic shop tickets found.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

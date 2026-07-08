@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <main>
+    <h1>Modify <%= vehicle.inv_make %> <%= vehicle.inv_model %></h1>
+
+    <div class="form-container">
+      <form action="/admin/edit-vehicle" method="POST" class="account-form">
+        <input type="hidden" name="inv_id" value="<%= vehicle.inv_id %>">
+
+        <label for="classification_id">Category:</label>
+        <select id="classification_id" name="classification_id" required style="padding: 0.75rem; margin-bottom: 1.5rem; border-radius: var(--border-radius);">
+          <% categories.forEach(cat => { %>
+            <option value="<%= cat.classification_id %>" <%= cat.classification_id == vehicle.classification_id ? 'selected' : '' %>><%= cat.classification_name %></option>
+          <% }) %>
+        </select>
+
+        <label for="inv_make">Make:</label>
+        <input type="text" id="inv_make" name="inv_make" value="<%= vehicle.inv_make %>" required>
+
+        <label for="inv_model">Model:</label>
+        <input type="text" id="inv_model" name="inv_model" value="<%= vehicle.inv_model %>" required>
+
+        <label for="inv_year">Year:</label>
+        <input type="text" id="inv_year" name="inv_year" value="<%= vehicle.inv_year %>" required maxlength="4">
+
+        <label for="inv_description">Description:</label>
+        <textarea id="inv_description" name="inv_description" required style="padding: 0.75rem; margin-bottom: 1.5rem; border-radius: var(--border-radius); border: 1px solid #ccc; font-family: inherit;"><%= vehicle.inv_description %></textarea>
+
+        <label for="inv_image">Image Path:</label>
+        <input type="text" id="inv_image" name="inv_image" value="<%= vehicle.inv_image %>" required>
+
+        <label for="inv_thumbnail">Thumbnail Path:</label>
+        <input type="text" id="inv_thumbnail" name="inv_thumbnail" value="<%= vehicle.inv_thumbnail %>" required>
+
+        <label for="inv_price">Price:</label>
+        <input type="number" id="inv_price" name="inv_price" value="<%= vehicle.inv_price %>" required>
+
+        <label for="inv_miles">Miles:</label>
+        <input type="number" id="inv_miles" name="inv_miles" value="<%= vehicle.inv_miles %>" required>
+
+        <label for="inv_color">Color:</label>
+        <input type="text" id="inv_color" name="inv_color" value="<%= vehicle.inv_color %>" required>
+
+        <button type="submit">Update Vehicle Details</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

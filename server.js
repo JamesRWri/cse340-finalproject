@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import session from 'express-session';
 
 import baseRoute from './src/routes/baseRoute.js';
 import vehicleRoute from './src/routes/vehicleRoute.js';
@@ -22,6 +23,23 @@ app.use(morgan('dev'));
 app.use(express.static('./public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'supersecretkey',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true, 
+    sameSite: "lax", 
+    maxAge: 24 * 60 * 60 * 1000
+  }
+}));
+
+app.use((req, res, next) => {
+  res.locals.loggedin = req.session.loggedin || false;
+  res.locals.accountData = req.session.user || null;
+  next();
+});
 
 app.use((req, res, next) => {
     res.locals.loggedin = true;

@@ -1,11 +1,16 @@
 import pool from "../database/pool.js"
+import bcrypt from "bcryptjs"
 
 export async function registerAccount(account_firstname, account_lastname, account_email, account_password) {
   try {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(account_password, saltRounds);
+
     const sql = `INSERT INTO public.account 
                  (account_firstname, account_lastname, account_email, account_password, account_type) 
                  VALUES ($1, $2, $3, $4, 'Client') RETURNING *`
-    const result = await pool.query(sql, [account_firstname, account_lastname, account_email, account_password])
+                 
+    const result = await pool.query(sql, [account_firstname, account_lastname, account_email, hashedPassword])
     return result.rowCount > 0
   } catch (error) {
     console.error("Model error registering account: " + error)

@@ -3,6 +3,7 @@ import {
   checkExistingEmail, 
   getAccountByEmail 
 } from "../models/accountModel.js"
+import bcrypt from "bcryptjs" 
 
 export async function buildLogin(req, res, next) {
   try {
@@ -68,13 +69,21 @@ export async function processLogin(req, res, next) {
       })
     }
 
-    if (account_password === accountData.account_password) {
+    const passwordMatch = await bcrypt.compare(account_password, accountData.account_password)
+
+    if (passwordMatch) {
+      delete accountData.account_password
+      
       req.session.user = accountData
-      res.locals.accountData = accountData
-      res.locals.loggedin = 1
+      req.session.loggedin = true
       
       req.flash("notice", `Welcome back, ${accountData.account_firstname}!`)
-      return res.redirect("/")
+      
+      if (accountData.account_type === "Admin" || accountData.account_type === "Employee") {
+        return res.redirect("/account/dashboard")
+      } else {
+        return res.redirect("/vehicles/inventory")
+      }
     } else {
       req.flash("notice", "Incorrect password.")
       return res.status(400).render("account/login", {
@@ -85,4 +94,9 @@ export async function processLogin(req, res, next) {
   } catch (error) {
     next(error)
   }
+}
+
+export async function processLogout(req, res, next) {
+  req.session.destroy()
+  res.redirect("/")
 }

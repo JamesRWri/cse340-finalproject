@@ -1,10 +1,17 @@
 import express from "express";
-import { buildInventory, buildVehicleDetail } from "../controllers/vehicleController.js";
+import { buildInventory, buildVehicleDetail, buildManagement, buildAddInventory, buildAddClassification, addClassificationSubmit, addInventorySubmit } from "../controllers/vehicleController.js";
 
 const router = express.Router();
 
-router.get("/inventory", buildInventory);
+router.get("/", buildManagement);
 
+router.get("/add-inventory", buildAddInventory);
+router.post("/add-inventory", addInventorySubmit);
+
+router.get("/add-classification", buildAddClassification);
+router.post("/add-classification", addClassificationSubmit);
+
+router.get("/inventory", buildInventory);
 router.get("/detail/:inventoryId", buildVehicleDetail);
 
 export default router;

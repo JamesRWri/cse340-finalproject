@@ -31,24 +31,26 @@ export async function processRegistration(req, res, next) {
 
     const emailExists = await checkExistingEmail(account_email)
     if (emailExists) {
-      req.flash("notice", "That email is already registered. Please login instead.")
       return res.status(400).render("account/register", {
         title: "Register An Account",
         account_firstname,
         account_lastname,
-        account_email
+        account_email,
+        messages: { notice: "That email is already registered. Please login instead." }
       })
     }
 
     const regResult = await registerAccount(account_firstname, account_lastname, account_email, account_password)
 
     if (regResult) {
-      req.flash("notice", "Registration successful! Please log in.")
-      res.redirect("/account/login")
+      return res.status(201).render("account/login", {
+        title: "Login",
+        messages: { notice: "Registration successful! Please log in." }
+      })
     } else {
-      req.flash("notice", "Sorry, registration failed.")
-      res.status(501).render("account/register", {
+      return res.status(501).render("account/register", {
         title: "Register An Account",
+        messages: { notice: "Sorry, registration failed." }
       })
     }
   } catch (error) {
@@ -62,13 +64,13 @@ export async function processLogin(req, res, next) {
     const accountData = await getAccountByEmail(account_email)
 
     if (!accountData) {
-      req.flash("notice", "Please check your credentials and try again.")
       return res.status(400).render("account/login", {
         title: "Login",
         account_email,
+        messages: { notice: "Please check your credentials and try again." }
       })
     }
-
+    
     const passwordMatch = await bcrypt.compare(account_password, accountData.account_password)
 
     if (passwordMatch) {
@@ -77,20 +79,35 @@ export async function processLogin(req, res, next) {
       req.session.user = accountData
       req.session.loggedin = true
       
-      req.flash("notice", `Welcome back, ${accountData.account_firstname}!`)
-      
       if (accountData.account_type === "Admin" || accountData.account_type === "Employee") {
         return res.redirect("/account/dashboard")
       } else {
         return res.redirect("/vehicles/inventory")
       }
     } else {
-      req.flash("notice", "Incorrect password.")
       return res.status(400).render("account/login", {
         title: "Login",
         account_email,
+        messages: { notice: "Incorrect password." }
       })
     }
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function buildDashboard(req, res, next) {
+  try {
+    if (!req.session || !req.session.loggedin) {
+      return res.redirect("/account/login")
+    }
+
+    const accountData = req.session.user
+
+    res.render("account/dashboard", {
+      title: "Account Management Dashboard",
+      accountData, 
+    })
   } catch (error) {
     next(error)
   }

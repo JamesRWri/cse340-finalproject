@@ -1,0 +1,39 @@
+<main class="form-container">
+    <h1><%= title %></h1>
+
+    <form action="/vehicles/add-inventory" method="post" class="management-form">
+        <p>All fields are required.</p>
+
+        <label for="classification_id">Classification:</label>
+        <%- classificationSelect %>
+
+        <label for="inv_make">Make:</label>
+        <input type="text" id="inv_make" name="inv_make" required placeholder="e.g., Ford">
+
+        <label for="inv_model">Model:</label>
+        <input type="text" id="inv_model" name="inv_model" required placeholder="e.g., F-150">
+
+        <label for="inv_year">Year:</label>
+        <input type="number" id="inv_year" name="inv_year" required min="1900" max="2030" placeholder="e.g., 2024">
+
+        <label for="inv_description">Description:</label>
+        <textarea id="inv_description" name="inv_description" required placeholder="Provide a detailed description..."></textarea>
+
+        <label for="inv_image">Image Path:</label>
+        <input type="text" id="inv_image" name="inv_image" required value="/images/vehicles/no-image.png">
+
+        <label for="inv_thumbnail">Thumbnail Path:</label>
+        <input type="text" id="inv_thumbnail" name="inv_thumbnail" required value="/images/vehicles/no-image-tn.png">
+
+        <label for="inv_price">Price:</label>
+        <input type="number" id="inv_price" name="inv_price" required min="1" placeholder="e.g., 45000">
+
+        <label for="inv_miles">Miles:</label>
+        <input type="number" id="inv_miles" name="inv_miles" required min="0" placeholder="e.g., 12000">
+
+        <label for="inv_color">Color:</label>
+        <input type="text" id="inv_color" name="inv_color" required placeholder="e.g., Black">
+
+        <button type="submit" class="btn-submit">Add Vehicle</button>
+    </form>
+</main>

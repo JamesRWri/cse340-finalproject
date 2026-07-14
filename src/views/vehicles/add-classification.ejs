@@ -1,0 +1,19 @@
+<main class="form-container">
+    <h1><%= title %></h1>
+
+    <form action="/vehicles/add-classification" method="post" class="management-form">
+        <p>Field is required.</p>
+
+        <label for="classification_name">Classification Name:</label>
+        <input 
+            type="text" 
+            id="classification_name" 
+            name="classification_name" 
+            required 
+            placeholder="e.g., Off-Road, Hybrid, EV"
+            pattern="^[a-zA-Z0-9]+$" 
+            title="Classification name cannot contain spaces or special characters.">
+
+        <button type="submit" class="btn-submit">Add Classification</button>
+    </form>
+</main>

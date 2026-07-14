@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import session from 'express-session';
+import flash from 'connect-flash';
 
 import baseRoute from './src/routes/baseRoute.js';
 import vehicleRoute from './src/routes/vehicleRoute.js';
@@ -35,6 +36,8 @@ app.use(session({
   }
 }));
 
+app.use(flash());
+
 app.use((req, res, next) => {
   res.locals.loggedin = req.session.loggedin || false;
   res.locals.accountData = req.session.user || null;
@@ -42,26 +45,6 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    res.locals.loggedin = true;
-    res.locals.accountData = { 
-        account_id: 1, 
-        account_firstname: "James", 
-        account_lastname: "User",
-        account_role: "Owner" 
-    };
-    
-    req._mockFlashes = req._mockFlashes || {};
-
-    req.flash = function(type, message) {
-        if (message) {
-            req._mockFlashes[type] = message;
-        } else {
-            const val = req._mockFlashes[type];
-            delete req._mockFlashes[type];
-            return val || '';
-        }
-    };
-
     res.locals.messages = {
         notice: req.flash('notice')
     };

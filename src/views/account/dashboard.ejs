@@ -1,0 +1,20 @@
+<main class="dashboard-container">
+    <h1><%= title %></h1>
+    
+    <section class="profile-info">
+        <h2>Logged In As: <%= accountData.account_firstname %> <%= accountData.account_lastname %></h2>
+        <ul>
+            <li><strong>Email Address:</strong> <%= accountData.account_email %></li>
+            <li><strong>Account Classification:</strong> <%= accountData.account_type %></li>
+        </ul>
+    </section>
+
+    <% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
+        <hr>
+        <section class="management-controls">
+            <h3>Inventory Tools</h3>
+            <p>Use the link below to add new vehicle classifications or manage the current live vehicle lot inventory catalogs.</p>
+            <p><a href="/vehicles/" class="btn-manage">Go to Vehicle Management Panel</a></p>
+        </section>
+    <% } %>
+</main>

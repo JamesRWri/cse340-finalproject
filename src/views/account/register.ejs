@@ -1,43 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-
-  <main>
-    <h1>Register an Account</h1>
+<main class="register-wrapper" style="max-width: 450px; margin: 3rem auto; padding: 2rem; font-family: Arial, sans-serif; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); background: #fff;">
+    
+    <h1 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 2rem; color: #2d3748;"><%= title %></h1>
 
     <% if (messages && messages.notice) { %>
-      <div class="notice-message"><%= messages.notice %></div>
+        <div class="notice-message" style="background: #fed7d7; color: #9b2c2c; padding: 0.75rem; border-radius: 4px; margin-bottom: 1.5rem; font-weight: bold;">
+            <%= messages.notice %>
+        </div>
     <% } %>
 
-    <div class="form-container">
-      <form action="/account/register" method="POST" class="account-form">
-        
-        <label for="account_firstname">First Name:</label>
-        <input type="text" id="account_firstname" name="account_firstname" required placeholder="John" value="<%= locals.account_firstname || '' %>">
+    <form action="/account/register" method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label for="account_firstname" style="font-weight: bold; color: #4a5568;">First Name:</label>
+            <input type="text" id="account_firstname" name="account_firstname" required value="<%= locals.account_firstname || '' %>" placeholder="John" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 1rem;">
+        </div>
 
-        <label for="account_lastname">Last Name:</label>
-        <input type="text" id="account_lastname" name="account_lastname" required placeholder="Doe" value="<%= locals.account_lastname || '' %>">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label for="account_lastname" style="font-weight: bold; color: #4a5568;">Last Name:</label>
+            <input type="text" id="account_lastname" name="account_lastname" required value="<%= locals.account_lastname || '' %>" placeholder="Doe" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 1rem;">
+        </div>
 
-        <label for="account_email">Email Address:</label>
-        <input type="email" id="account_email" name="account_email" required placeholder="johndoe@example.com" value="<%= locals.account_email || '' %>">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label for="account_email" style="font-weight: bold; color: #4a5568;">Email Address:</label>
+            <input type="email" id="account_email" name="account_email" required value="<%= locals.account_email || '' %>" placeholder="example@cse340.edu" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 1rem;">
+        </div>
 
-        <label for="account_password">Password:</label>
-        <input type="password" id="account_password" name="account_password" required placeholder="Create a secure password">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label for="account_password" style="font-weight: bold; color: #4a5568;">Password:</label>
+            <input type="password" id="account_password" name="account_password" required 
+                   pattern="(?=^.{12,}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).*$"
+                   placeholder="Create secure password" style="padding: 0.75rem; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 1rem;">
+            <span style="font-size: 0.85rem; color: #718096;">Must be minimum 12 characters, including 1 uppercase, 1 lowercase, 1 number, and 1 special symbol.</span>
+        </div>
 
-        <button type="submit">Register Account</button>
-      </form>
+        <button type="submit" style="background: #2ecc71; color: white; padding: 0.75rem; border: none; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 0.5rem;">Register Account</button>
+    </form>
 
-      <p class="form-switch">
-        Already have an account? <a href="/account/login">Log in here</a>.
-      </p>
-    </div>
-  </main>
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 2rem 0;">
 
-</body>
-</html>
+    <p style="text-align: center; margin: 0; color: #4a5568;">
+        Already registered? <a href="/account/login" style="color: #3498db; text-decoration: none; font-weight: bold;">Log in here</a>
+    </p>
+</main>

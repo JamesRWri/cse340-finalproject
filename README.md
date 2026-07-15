@@ -52,3 +52,4 @@ A fully functional, database-driven web application built as the final project f
 
 ## ⚠️ Known Limitations & Notes
 * **Vehicle Images:** New vehicle images are handled by downloading the asset files directly to the local system, placing them into the project's images folder, and matching their file names to the corresponding image path names stored in the database.
+* **Starting Locally:** Use "npm run dev"

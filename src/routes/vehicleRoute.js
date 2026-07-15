@@ -1,5 +1,5 @@
 import express from "express";
-import { buildInventory, buildVehicleDetail, buildManagement, buildAddInventory, buildAddClassification, addClassificationSubmit, addInventorySubmit, buildInventoryByCategory, buildEmployeeInventoryView, buildEditVehicleView } from "../controllers/vehicleController.js";
+import { buildInventory, buildVehicleDetail, buildManagement, buildAddInventory, buildAddClassification, addClassificationSubmit, addInventorySubmit, buildInventoryByCategory, buildEmployeeInventoryView, buildEditVehicleView, updateVehicleSubmit } from "../controllers/vehicleController.js";
 
 const router = express.Router();
 
@@ -16,5 +16,6 @@ router.get("/detail/:inventoryId", buildVehicleDetail);
 
 router.get("/employee-list", buildEmployeeInventoryView)
 router.get("/edit-vehicle/:inv_id", buildEditVehicleView)
+router.post("/update", updateVehicleSubmit)
 
 export default router;

@@ -77,3 +77,18 @@ export async function deleteReview(review_id) {
     return error.message;
   }
 }
+
+export async function getAllReviews() {
+  try {
+    const sql = `SELECT r.*, i.inv_make, i.inv_model, a.account_firstname, a.account_lastname 
+                 FROM reviews r 
+                 JOIN inventory i ON r.inv_id = i.inv_id 
+                 JOIN account a ON r.account_id = a.account_id 
+                 ORDER BY r.review_date DESC`
+    const result = await pool.query(sql)
+    return result.rows
+  } catch (error) {
+    console.error("getAllReviews error: " + error)
+    return []
+  }
+}

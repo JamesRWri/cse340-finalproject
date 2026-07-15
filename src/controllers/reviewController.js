@@ -1,4 +1,5 @@
 import * as reviewModel from "../models/reviewModel.js";
+import { getAllReviews } from "../models/reviewModel.js";
 
 export async function addReview(req, res, next) {
   try {
@@ -23,12 +24,15 @@ export async function buildEditReview(req, res, next) {
     const review_id = req.params.reviewId;
     const review = await reviewModel.getReviewById(review_id);
 
-    if (!review || review.account_id !== req.session.user.account_id) {
+    const isOwner = review && review.account_id === req.session.user.account_id;
+    const isStaff = req.session.user.account_type === "Employee" || req.session.user.account_type === "Admin";
+
+    if (!review || (!isOwner && !isStaff)) {
       req.flash("notice", "You are not authorized to edit this review.");
       return res.redirect("/account/dashboard");
     }
 
-    res.render("review/edit", {
+    res.render("reviews/edit", {
       title: `Edit Review for ${review.inv_year} ${review.inv_make} ${review.inv_model}`,
       review
     });
@@ -42,7 +46,10 @@ export async function processEditReview(req, res, next) {
     const { review_id, review_text } = req.body;
     const review = await reviewModel.getReviewById(review_id);
 
-    if (!review || review.account_id !== req.session.user.account_id) {
+    const isOwner = review && review.account_id === req.session.user.account_id;
+    const isStaff = req.session.user.account_type === "Employee" || req.session.user.account_type === "Admin";
+
+    if (!review || (!isOwner && !isStaff)) {
       req.flash("notice", "Unauthorized action.");
       return res.redirect("/account/dashboard");
     }
@@ -68,7 +75,8 @@ export async function buildDeleteReview(req, res, next) {
       return res.redirect("/account/dashboard");
     }
 
-    res.render("review/delete", {
+    // Double-check if your folder name is "reviews" or "review"
+    res.render("reviews/delete", {
       title: `Delete Review for ${review.inv_year} ${review.inv_make} ${review.inv_model}`,
       review
     });
@@ -85,5 +93,18 @@ export async function processDeleteReview(req, res, next) {
     res.redirect("/account/dashboard");
   } catch (error) {
     next(error);
+  }
+}
+
+export async function buildModerationView(req, res, next) {
+  try {
+    const reviews = await getAllReviews()
+    
+    res.render("reviews/moderate", {
+      title: "Customer Review Moderation",
+      reviews
+    })
+  } catch (error) {
+    next(error)
   }
 }

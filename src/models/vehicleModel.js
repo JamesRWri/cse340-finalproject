@@ -72,9 +72,17 @@ export async function updateVehicle(vehicleData) {
       WHERE inv_id = $11 RETURNING *`
     
     const result = await pool.query(sql, [
-      inv_id, inv_make, inv_model, inv_year, inv_description, 
-      inv_image, inv_thumbnail, inv_price, inv_miles, 
-      inv_color, classification_id
+      inv_make,          
+      inv_model,         
+      inv_year,         
+      inv_description,   
+      inv_image,         
+      inv_thumbnail,    
+      inv_price,         
+      inv_miles,         
+      inv_color,         
+      classification_id, 
+      inv_id             
     ])
     return result.rowCount > 0
   } catch (error) {

@@ -4,7 +4,8 @@ import {
   getClassifications, 
   insertClassification,
   insertInventoryItem,
-  getVehiclesByClassificationId
+  getVehiclesByClassificationId,
+  updateVehicle
 } from "../models/vehicleModel.js";
 import { getReviewsByVehicleId } from "../models/reviewModel.js";
 
@@ -186,9 +187,8 @@ export async function buildEditVehicleView(req, res, next) {
   try {
     const inv_id = parseInt(req.params.inv_id)
     
-    const vehicleData = await invModel.getVehicleById(inv_id) 
-    
-    const classifications = await invModel.getClassifications()
+    const vehicleData = await getVehicleById(inv_id) 
+    const classifications = await getClassifications()
     
     res.render("vehicles/edit-vehicle", {
       title: `Edit ${vehicleData.inv_make} ${vehicleData.inv_model}`,
@@ -203,6 +203,48 @@ export async function buildEditVehicleView(req, res, next) {
       inv_color: vehicleData.inv_color,
       classification_id: vehicleData.classification_id
     })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function updateVehicleSubmit(req, res, next) {
+  try {
+    const {
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id
+    } = req.body
+
+    const vehicleData = {
+      inv_id: parseInt(inv_id),
+      inv_make,
+      inv_model,
+      inv_year: parseInt(inv_year),
+      inv_description,
+      inv_image: "/images/vehicles/no-image.png",
+      inv_thumbnail: "/images/vehicles/no-image-tn.png",
+      inv_price: parseFloat(inv_price),
+      inv_miles: parseInt(inv_miles),
+      inv_color,
+      classification_id: parseInt(classification_id)
+    }
+
+    const updateResult = await updateVehicle(vehicleData)
+
+    if (updateResult) {
+      req.flash("notice", `Successfully updated ${inv_make} ${inv_model}!`)
+      res.redirect("/vehicles/employee-list")
+    } else {
+      req.flash("notice", "Sorry, the update failed. Please try again.")
+      res.redirect(`/vehicles/edit-vehicle/${inv_id}`)
+    }
   } catch (error) {
     next(error)
   }

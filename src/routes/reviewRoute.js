@@ -1,5 +1,6 @@
 import express from "express"
 import * as reviewController from "../controllers/reviewController.js"
+import { checkAdmin } from "../middleware/middleware.js";
 
 const router = express.Router()
 
@@ -19,5 +20,7 @@ router.post("/update", checkLogin, reviewController.processEditReview);
 
 router.get("/delete/:reviewId", checkLogin, reviewController.buildDeleteReview);
 router.post("/delete", checkLogin, reviewController.processDeleteReview);
+
+router.get("/moderate", checkAdmin, reviewController.buildModerationView)
 
 export default router

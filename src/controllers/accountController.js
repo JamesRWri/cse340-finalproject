@@ -4,6 +4,7 @@ import {
   getAccountByEmail 
 } from "../models/accountModel.js"
 import { getReviewsByAccountId } from "../models/reviewModel.js"
+import pool from "../database/pool.js"
 import bcrypt from "bcryptjs" 
 
 export async function buildLogin(req, res, next) {
@@ -125,4 +126,39 @@ export async function buildDashboard(req, res, next) {
 export async function processLogout(req, res, next) {
   req.session.destroy()
   res.redirect("/")
+}
+
+export async function buildManageUsers(req, res) {
+    try {
+        const result = await pool.query(
+            "SELECT account_id, account_firstname, account_lastname, account_email, account_type FROM account ORDER BY account_lastname ASC"
+        );
+        const users = result.rows;
+
+        let userTable = '<table class="admin-table" style="width:100%; border-collapse: collapse; margin-top: 20px;">';
+        userTable += '<thead><tr style="background-color: #f2f2f2; text-align: left;">';
+        userTable += '<th style="padding: 10px; border-bottom: 1px solid #ddd;">Name</th>';
+        userTable += '<th style="padding: 10px; border-bottom: 1px solid #ddd;">Email</th>';
+        userTable += '<th style="padding: 10px; border-bottom: 1px solid #ddd;">Role</th>';
+        userTable += '</tr></thead><tbody>';
+
+        users.forEach(user => {
+            userTable += `<tr style="border-bottom: 1px solid #ddd;">`;
+            userTable += `<td style="padding: 10px;">${user.account_firstname} ${user.account_lastname}</td>`;
+            userTable += `<td style="padding: 10px;">${user.account_email}</td>`;
+            userTable += `<td style="padding: 10px;">${user.account_type}</td>`;
+            userTable += `</tr>`;
+        });
+
+        userTable += '</tbody></table>';
+
+        res.render("account/manage-users", {
+            title: "Manage Users & Roles",
+            userTable: userTable
+        });
+
+    } catch (error) {
+        console.error("Error fetching users for admin:", error);
+        res.status(500).send("Server Error loading user management screen.");
+    }
 }

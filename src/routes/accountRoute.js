@@ -13,4 +13,6 @@ router.post("/login", accountController.processLogin)
 
 router.get("/dashboard", accountController.buildDashboard)
 
+router.get("/manage-users", accountController.buildManageUsers)
+
 export default router

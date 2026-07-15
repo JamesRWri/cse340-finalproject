@@ -3,19 +3,21 @@ import {
   getVehicleById,
   getClassifications, 
   insertClassification,
-  insertInventoryItem
+  insertInventoryItem,
+  getVehiclesByClassificationId
 } from "../models/vehicleModel.js";
 import { getReviewsByVehicleId } from "../models/reviewModel.js";
 
 export async function buildInventory(req, res, next) {
   try {
+    const classifications = await getClassifications();
     const vehicles = await getAllVehicles();
     
     console.log("Vehicles loaded from DB:", vehicles);
 
     res.render("vehicles/inventory", {
       title: "Main Lot Vehicle Inventory",
-      vehicles: vehicles || []
+      vehicles, classifications
     });
   } catch (error) {
     next(error);
@@ -150,5 +152,58 @@ export async function addInventorySubmit(req, res, next) {
     }
   } catch (error) {
     next(error);
+  }
+}
+
+export async function buildInventoryByCategory(req, res, next) {
+  try {
+    const classificationId = req.params.classificationId;
+    const vehicles = await getVehiclesByClassificationId(classificationId);
+    
+    res.render("vehicles/inventory", {
+      title: "Filtered Inventory",
+      vehicles: vehicles || []
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function buildEmployeeInventoryView(req, res, next) {
+  try {
+    const vehicles = await getAllVehicles(); 
+    
+    res.render("vehicles/employee-inventory", {
+      title: "Staff Inventory Registry",
+      vehicles
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function buildEditVehicleView(req, res, next) {
+  try {
+    const inv_id = parseInt(req.params.inv_id)
+    
+    const vehicleData = await invModel.getVehicleById(inv_id) 
+    
+    const classifications = await invModel.getClassifications()
+    
+    res.render("vehicles/edit-vehicle", {
+      title: `Edit ${vehicleData.inv_make} ${vehicleData.inv_model}`,
+      classifications,
+      inv_id: vehicleData.inv_id,
+      inv_make: vehicleData.inv_make,
+      inv_model: vehicleData.inv_model,
+      inv_year: vehicleData.inv_year,
+      inv_description: vehicleData.inv_description,
+      inv_price: vehicleData.inv_price,
+      inv_miles: vehicleData.inv_miles,
+      inv_color: vehicleData.inv_color,
+      classification_id: vehicleData.classification_id
+    })
+  } catch (error) {
+    next(error)
   }
 }

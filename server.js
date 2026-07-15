@@ -55,7 +55,7 @@ app.use('/', baseRoute);
 app.use('/vehicles', vehicleRoute);
 app.use('/categories', categoryRoute);
 app.use('/account', accountRoute);
-app.use('/reviews', reviewRoute);
+app.use('/review', reviewRoute);
 app.use('/admin', adminRoute);
 app.use('/contact', contactRoute);
 app.use('/service', serviceRoute);

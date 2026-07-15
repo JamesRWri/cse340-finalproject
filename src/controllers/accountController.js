@@ -3,6 +3,7 @@ import {
   checkExistingEmail, 
   getAccountByEmail 
 } from "../models/accountModel.js"
+import { getReviewsByAccountId } from "../models/reviewModel.js"
 import bcrypt from "bcryptjs" 
 
 export async function buildLogin(req, res, next) {
@@ -104,9 +105,17 @@ export async function buildDashboard(req, res, next) {
 
     const accountData = req.session.user
 
+    let userReviews = []
+    try {
+      userReviews = await getReviewsByAccountId(accountData.account_id)
+    } catch (dbError) {
+      console.error("Error retrieving dashboard reviews: ", dbError)
+    }
+
     res.render("account/dashboard", {
       title: "Account Management Dashboard",
       accountData, 
+      userReviews,
     })
   } catch (error) {
     next(error)

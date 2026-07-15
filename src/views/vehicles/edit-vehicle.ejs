@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <main style="max-width: 600px; margin: 0 auto; padding: 2rem;">
+    <h1><%= title %></h1>
+
+    <% if (locals.notice) { %>
+      <div class="flash-notice" style="background: #fff3cd; color: #856404; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <%= notice %>
+      </div>
+    <% } %>
+
+    <form action="/vehicles/update" method="POST" style="display: flex; flex-direction: column; gap: 1.2rem; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #ddd;">
+      
+      <input type="hidden" name="inv_id" value="<%= inv_id %>">
+
+      <div>
+        <label for="classification_id" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Classification:</label>
+        <select name="classification_id" id="classification_id" required style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+          <% classifications.forEach(classification => { %>
+            <option value="<%= classification.classification_id %>" <%= classification.classification_id === classification_id ? 'selected' : '' %>>
+              <%= classification.classification_name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div>
+        <label for="inv_make" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Make:</label>
+        <input type="text" name="inv_make" id="inv_make" required value="<%= inv_make %>" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div>
+        <label for="inv_model" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Model:</label>
+        <input type="text" name="inv_model" id="inv_model" required value="<%= inv_model %>" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div>
+        <label for="inv_year" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Year:</label>
+        <input type="number" name="inv_year" id="inv_year" required min="1900" max="2027" value="<%= inv_year %>" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div>
+        <label for="inv_price" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Price ($):</label>
+        <input type="number" name="inv_price" id="inv_price" required min="1" value="<%= inv_price %>" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div>
+        <label for="inv_miles" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Miles:</label>
+        <input type="number" name="inv_miles" id="inv_miles" required min="0" value="<%= inv_miles %>" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div>
+        <label for="inv_color" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Color:</label>
+        <input type="text" name="inv_color" id="inv_color" required value="<%= inv_color %>" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div>
+        <label for="inv_description" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Description:</label>
+        <textarea name="inv_description" id="inv_description" required rows="4" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;"><%= inv_description %></textarea>
+      </div>
+
+      <button type="submit" style="background: #2ecc71; color: white; border: none; padding: 0.75rem; border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 1rem;">
+        💾 Save Changes
+      </button>
+    </form>
+
+    <div style="margin-top: 2rem;">
+      <a href="/vehicles/employee-list" style="display: inline-block; background: #34495e; color: #fff; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px;">⬅️ Cancel and Go Back</a>
+    </div>
+  </main>
+
+</body>
+</html>

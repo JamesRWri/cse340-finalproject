@@ -3,12 +3,21 @@ import * as reviewController from "../controllers/reviewController.js"
 
 const router = express.Router()
 
-router.post("/add", reviewController.addReview)
+function checkLogin(req, res, next) {
+  if (req.session.loggedin) {
+    next();
+  } else {
+    req.flash("notice", "Please log in to manage reviews.");
+    res.redirect("/account/login");
+  }
+}
 
-router.get("/edit/:reviewId", reviewController.buildEditReview)
+router.post("/add", checkLogin, reviewController.addReview);
 
-router.post("/update", reviewController.editReview)
+router.get("/edit/:reviewId", checkLogin, reviewController.buildEditReview);
+router.post("/update", checkLogin, reviewController.processEditReview);
 
-router.post("/delete", reviewController.removeReview)
+router.get("/delete/:reviewId", checkLogin, reviewController.buildDeleteReview);
+router.post("/delete", checkLogin, reviewController.processDeleteReview);
 
 export default router

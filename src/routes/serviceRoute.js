@@ -12,4 +12,6 @@ router.get("/my-requests", serviceController.buildMyRequests)
 
 router.get("/manage", serviceController.buildServiceManage)
 
+router.post("/update-status", checkLogin, serviceController.processStatusUpdate)
+
 export default router

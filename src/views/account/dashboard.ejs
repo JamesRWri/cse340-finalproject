@@ -9,12 +9,85 @@
         </ul>
     </section>
 
-    <% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
-        <hr>
-        <section class="management-controls">
-            <h3>Inventory Tools</h3>
-            <p>Use the link below to add new vehicle classifications or manage the current live vehicle lot inventory catalogs.</p>
-            <p><a href="/vehicles/" class="btn-manage">Go to Vehicle Management Panel</a></p>
-        </section>
+    <h2>Welcome back, <%= accountData.account_firstname %>!</h2>
+<p>Account Type: <strong><%= accountData.account_type %></strong></p>
+
+<% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
+  <section class="dashboard-section" style="border: 2px solid #0056b3; padding: 1.5rem; margin-top: 1.5rem; border-radius: 8px;">
+    <h3>⚙️ Staff Operations Dashboard</h3>
+    <p>Use these tools to manage daily dealership operations:</p>
+    
+    <ul style="line-height: 2;">
+      <li>
+        <a href="/vehicles/employee-list" style="font-weight: bold; color: #0056b3;">🚗 Update Vehicle Inventory</a> 
+        (Update price, description, and availability)
+      </li>
+      
+      <li>
+        <a href="/service/manage" style="font-weight: bold; color: #0056b3;">🛠️ Service Tickets Portal</a> 
+        (Update status to Submitted, In Progress, Completed & Add notes)
+      </li>
+      
+      <li>
+        <a href="/review/delete" style="font-weight: bold; color: #0056b3;">💬 Moderate Customer Reviews</a> 
+        (Remove inappropriate submissions)
+      </li>
+      
+      <li>
+        <a href="/contact/manage" style="font-weight: bold; color: #0056b3;">📩 View Contact Inquiries</a> 
+        (Read customer messages)
+      </li>
+    </ul>
+  </section>
+<% } %>
+
+<% if (accountData.account_type === "Admin") { %>
+  <section class="dashboard-section" style="border: 2px solid #d9534f; padding: 1.5rem; margin-top: 1.5rem; border-radius: 8px;">
+    <h3>👑 Executive Owner Actions</h3>
+    <p>High-level system settings (restricted to Admin accounts only):</p>
+    
+    <ul style="line-height: 2;">
+      <li>
+        <a href="/inv/add-classification" style="font-weight: bold; color: #d9534f;">➕ Add New Vehicle Classification</a>
+      </li>
+      <li>
+        <a href="/inv/add-vehicle" style="font-weight: bold; color: #d9534f;">➕ Add New Vehicle to Inventory</a>
+      </li>
+      <li>
+        <a href="/account/manage-users" style="font-weight: bold; color: #d9534f;">👥 Manage System Accounts & Roles</a>
+      </li>
+    </ul>
+  </section>
+<% } %>
+
+    <section class="dashboard-reviews" style="margin-top: 2.5rem; background: #fafafa; padding: 1.5rem; border-radius: 6px; border: 1px solid #e3e3e3;">
+    <h2>My Reviews</h2>
+    
+    <% if (locals.messages && locals.messages.notice) { %>
+        <div class="alert-message" style="margin-bottom: 1rem; color: #0056b3;"><%= messages.notice %></div>
     <% } %>
+
+    <% if (userReviews && userReviews.length > 0) { %>
+        <ol style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+            <% userReviews.forEach(review => { %>
+                <li style="border-bottom: 1px solid #eee; padding-bottom: 1rem;">
+                    Reviewed the <strong><%= review.inv_year %> <%= review.inv_make %> <%= review.inv_model %></strong> 
+                    on <%= new Date(review.review_date).toLocaleDateString() %>:
+                    <em style="display: block; margin: 0.5rem 0; color: #555; background: #fff; padding: 0.5rem; border-radius: 4px; border-left: 3px solid #0056b3;">
+                        "<%= review.review_text %>"
+                    </em>
+                    <div style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        <a href="/review/edit/<%= review.review_id %>" style="color: #0056b3; margin-right: 1.5rem; font-weight: bold; text-decoration: none;">✏️ Edit Review</a>
+                        <a href="/review/delete/<%= review.review_id %>" style="color: #d9534f; font-weight: bold; text-decoration: none;">🗑️ Delete Review</a>
+                    </div>
+                </li>
+            <% }) %>
+        </ol>
+    <% } else { %>
+        <p>You haven't written any reviews yet. Go browse the lot to write your first review!</p>
+    <% } %>
+    <a href="/vehicles/inventory" style="background-color: #333; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-size: 0.9rem;">
+            🚘 Back to Car Lot
+        </a>
+</section>
 </main>

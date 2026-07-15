@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <main style="max-width: 1000px; margin: 0 auto; padding: 2rem;">
+    <h1><%= title %></h1>
+
+    <% if (locals.notice) { %>
+      <div class="flash-notice" style="background: #fff3cd; color: #856404; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <%= notice %>
+      </div>
+    <% } %>
+
+    <p style="margin-bottom: 2rem; color: #555;">Select a vehicle from the registry below to modify its price, description, or availability status.</p>
+
+    <table style="width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden;">
+      <thead>
+        <tr style="background: #0056b3; color: white; text-align: left;">
+          <th style="padding: 1rem;">Vehicle</th>
+          <th style="padding: 1rem;">Classification</th>
+          <th style="padding: 1rem;">Price</th>
+          <th style="padding: 1rem; text-align: center;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (vehicles && vehicles.length > 0) { %>
+          <% vehicles.forEach(vehicle => { %>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 1rem; font-weight: bold;">
+                <%= vehicle.inv_year %> <%= vehicle.inv_make %> <%= vehicle.inv_model %>
+              </td>
+              <td style="padding: 1rem;">
+                <%= vehicle.classification_name %>
+              </td>
+              <td style="padding: 1rem; color: #2ecc71; font-weight: bold;">
+                $<%= Number(vehicle.inv_price).toLocaleString() %>
+              </td>
+              <td style="padding: 1rem; text-align: center;">
+                <a href="/vehicles/edit-vehicle/<%= vehicle.inv_id %>" style="background: #e67e22; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                  ✏️ Edit Details
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="4" style="padding: 2rem; text-align: center; color: #777;">No vehicles currently registered in the database.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 2rem;">
+      <a href="/account/dashboard" style="display: inline-block; background: #34495e; color: #fff; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px;">⬅️ Back to Dashboard</a>
+    </div>
+  </main>
+
+</body>
+</html>

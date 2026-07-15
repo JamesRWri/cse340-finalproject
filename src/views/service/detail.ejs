@@ -1,31 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <main>
-    <h1>Schedule Certified Service</h1>
-    <p>Book professional diagnostic work, styling modifications, or regular mechanical tuning with our agency experts.</p>
+<main class="form-container">
+    <h1><%= title %></h1>
 
-    <% if (messages && messages.notice) { %>
-      <div class="notice-message"><%= messages.notice %></div>
+    <% if (locals.messages && locals.messages.notice) { %>
+        <div class="alert-message"><%= messages.notice %></div>
     <% } %>
 
-    <div class="form-container">
-      <form action="/service/book" method="POST" class="account-form">
+    <form action="/service/book" method="post" class="management-form">
+        <p>All fields are required.</p>
+
         <label for="service_vehicle_info">Vehicle Details (Year, Make, Model):</label>
-        <input type="text" id="service_vehicle_info" name="service_vehicle_info" required placeholder="e.g., 2021 Toyota RAV4" value="<%= locals.service_vehicle_info || '' %>">
+        <input 
+            type="text" 
+            id="service_vehicle_info" 
+            name="service_vehicle_info" 
+            required 
+            placeholder="e.g., 2018 Toyota Camry">
 
-        <label for="service_description">Description of Needed Maintenance:</label>
-        <textarea id="service_description" name="service_description" required placeholder="Describe the mechanical issues or requested optimizations..." style="padding: 0.75rem; margin-bottom: 1.5rem; border-radius: var(--border-radius); border: 1px solid #ccc; font-family: inherit; min-height: 120px;"><%= locals.service_description || '' %></textarea>
+        <label for="service_description">Problem Description / Services Needed:</label>
+        <textarea 
+            id="service_description" 
+            name="service_description" 
+            required 
+            placeholder="Please describe what your vehicle needs (e.g., oil change, brake squeak, engine diagnostics)..."></textarea>
 
-        <button type="submit">Book Service Appointment</button>
-      </form>
-    </div>
-  </main>
-</body>
-</html>
+        <button type="submit" class="btn-submit">Submit Request</button>
+    </form>
+</main>

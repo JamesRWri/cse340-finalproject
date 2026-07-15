@@ -72,9 +72,9 @@ export async function updateVehicle(vehicleData) {
       WHERE inv_id = $11 RETURNING *`
     
     const result = await pool.query(sql, [
-      inv_make, inv_model, inv_year, inv_description, 
+      inv_id, inv_make, inv_model, inv_year, inv_description, 
       inv_image, inv_thumbnail, inv_price, inv_miles, 
-      inv_color, classification_id, inv_id
+      inv_color, classification_id
     ])
     return result.rowCount > 0
   } catch (error) {
@@ -100,16 +100,27 @@ export async function insertInventoryItem(
 ) {
   try {
     const sql = `INSERT INTO inventory 
-      (classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color) 
+      (inv_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id) 
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
     
     const result = await pool.query(sql, [
-      classification_id, inv_make, inv_model, inv_year, 
-      inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color
+      inv_id, inv_make, inv_model, inv_year, 
+      inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id
     ]);
     return result.rows[0];
   } catch (error) {
     console.error("insertInventoryItem error: " + error);
     return error.message;
+  }
+}
+
+export async function getVehiclesByClassificationId(classification_id) {
+  try {
+    const sql = "SELECT * FROM inventory WHERE classification_id = $1";
+    const result = await pool.query(sql, [classification_id]);
+    return result.rows;
+  } catch (error) {
+    console.error("getVehiclesByClassificationId error: " + error);
+    return [];
   }
 }

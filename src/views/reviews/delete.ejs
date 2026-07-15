@@ -1,0 +1,14 @@
+<main class="form-container">
+    <h1><%= title %></h1>
+    <p style="color: #d9534f; font-weight: bold;">Warning: This action cannot be undone.</p>
+
+    <form action="/review/delete" method="post" class="management-form">
+        <input type="hidden" name="review_id" value="<%= review.review_id %>">
+
+        <label for="review_text">Review Content:</label>
+        <textarea id="review_text" readonly rows="5" style="background-color: #eee; cursor: not-allowed;"><%= review.review_text %></textarea>
+
+        <button type="submit" class="btn-submit" style="background-color: #d9534f;">Confirm Delete</button>
+        <a href="/account/dashboard" class="btn-cancel" style="display: block; text-align: center; margin-top: 1rem; color: #666;">Cancel</a>
+    </form>
+</main>

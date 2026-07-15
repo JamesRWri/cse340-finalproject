@@ -1,48 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <main>
-    <h1>Global Shop Tickets Management</h1>
-    <p><a href="/admin" style="font-weight: bold;">← Return to Admin Panel</a></p>
+<main class="management-container">
+    <h1><%= title %></h1>
 
-    <% if (messages && messages.notice) { %>
-      <div class="notice-message"><%= messages.notice %></div>
+    <% if (locals.messages && locals.messages.notice) { %>
+        <div class="alert-message"><%= messages.notice %></div>
     <% } %>
 
-    <div class="form-container" style="max-width: 100%; padding: 1.5rem;">
-      <table style="width: 100%; border-collapse: collapse; text-align: left;">
-        <thead>
-          <tr style="border-bottom: 2px solid var(--primary-color);">
-            <th style="padding: 0.5rem;">Client</th>
-            <th style="padding: 0.5rem;">Vehicle</th>
-            <th style="padding: 0.5rem;">Logged Date</th>
-            <th style="padding: 0.5rem;">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (requests && requests.length > 0) { %>
-            <% requests.forEach(ticket => { %>
-              <tr style="border-bottom: 1px solid #e1e4e6;">
-                <td style="padding: 0.75rem;"><%= ticket.account_firstname %> <%= ticket.account_lastname %></td>
-                <td style="padding: 0.75rem;"><%= ticket.service_vehicle_info %></td>
-                <td style="padding: 0.75rem; font-size: 0.9rem;"><%= new Date(ticket.service_date).toLocaleDateString() %></td>
-                <td style="padding: 0.75rem;"><span style="color: var(--accent-color); font-weight: bold;"><%= ticket.service_status %></span></td>
-              </tr>
+    <% if (requests && requests.length === 0) { %>
+        <p>No active service requests found.</p>
+    <% } else { %>
+        <div class="service-list">
+            <% requests.forEach(item => { %>
+                <div class="service-card" style="border: 1px solid #ddd; padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 6px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <h3><%= item.service_vehicle_info %></h3>
+                    <p><strong>Submitted By:</strong> <%= item.account_firstname %> <%= item.account_lastname %> (ID: <%= item.account_id %>)</p>
+                    <p><strong>Date Submitted:</strong> <%= new Date(item.service_date).toLocaleDateString() %></p>
+                    <p><strong>Details:</strong> <%= item.service_description %></p>
+                    
+                    <hr style="border: 0; border-top: 1px solid #eee; margin: 1rem 0;">
+
+                    <form action="/service/update-status" method="post" style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 300px;">
+                        <input type="hidden" name="service_id" value="<%= item.service_id %>">
+                        
+                        <label for="service_status_<%= item.service_id %>"><strong>Update Status:</strong></label>
+                        <select id="service_status_<%= item.service_id %>" name="service_status" style="padding: 0.5rem; border-radius: 4px; border: 1px solid #ccc;">
+                            <option value="Submitted" <%= item.service_status === 'Submitted' ? 'selected' : '' %>>Submitted</option>
+                            <option value="In Progress" <%= item.service_status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                            <option value="Completed" <%= item.service_status === 'Completed' ? 'selected' : '' %>>Completed</option>
+                        </select>
+
+                        <button type="submit" class="btn-submit" style="margin-top: 0.5rem; max-width: 150px;">Save Update</button>
+                    </form>
+                </div>
             <% }) %>
-          <% } else { %>
-            <tr>
-              <td colspan="4" style="padding: 1rem; text-align: center;">No dynamic shop tickets found.</td>
-            </tr>
-          <% } %>
-        </tbody>
-      </table>
-    </div>
-  </main>
-</body>
-</html>
+        </div>
+    <% } %>
+</main>

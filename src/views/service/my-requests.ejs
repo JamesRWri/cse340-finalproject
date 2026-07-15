@@ -1,38 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <main>
-    <h1>My Personal Service Appointments</h1>
-    <p><a href="/service/detail" style="font-weight: bold;">+ Book Another Service Appointment</a></p>
+<main class="management-container">
+    <h1><%= title %></h1>
+    <a href="/vehicles/inventory" style="background-color: #333; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-size: 0.9rem;">
+            🚘 Back to Car Lot
+        </a>
+    <a href="/service/detail" style="display: inline-block; margin-left: 3rem; background-color: #28a745; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9rem;">
+        ➕ Request Another Service
+    </a>
 
-    <% if (messages && messages.notice) { %>
-      <div class="notice-message"><%= messages.notice %></div>
+    <% if (locals.messages && locals.messages.notice) { %>
+        <div class="alert-message"><%= messages.notice %></div>
     <% } %>
 
-    <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem;">
-      <% if (requests && requests.length > 0) { %>
-        <% requests.forEach(req => { %>
-          <div class="form-container" style="max-width: 100%; margin: 0; padding: 1.5rem; text-align: left;">
-            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #e1e4e6; padding-bottom: 0.5rem; margin-bottom: 1rem;">
-              <strong style="color: var(--accent-color); font-size: 1.2rem;"><%= req.service_vehicle_info %></strong>
-              <span style="background: #e1e4e6; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: bold;"><%= req.service_status %></span>
-            </div>
-            <p style="margin-bottom: 0.5rem; color: var(--text-light); font-size: 0.9rem;"><strong>Logged on:</strong> <%= new Date(req.service_date).toLocaleString() %></p>
-            <p style="margin: 0; font-style: italic;">"<%= req.service_description %>"</p>
-          </div>
-        <% }) %>
-      <% } else { %>
-        <div class="form-container" style="max-width: 100%; text-align: center;">
-          <p>You haven't registered any maintenance service tickets yet.</p>
+    <% if (history && history.length === 0) { %>
+        <p>You haven't submitted any service requests yet.</p>
+    <% } else { %>
+        <div class="service-list">
+            <% history.forEach(item => { %>
+                <div class="service-card" style="border: 1px solid #ccc; padding: 1.25rem; margin-bottom: 1.25rem; border-radius: 6px; background-color: #fbfbfb;">
+                    <h3><%= item.service_vehicle_info %></h3>
+                    <p><strong>Status:</strong> <span class="status-badge" style="background: #e2e8f0; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: bold;"><%= item.service_status %></span></p>
+                    <p><strong>Submitted on:</strong> <%= new Date(item.service_date).toLocaleDateString() %></p>
+                    <p><strong>Description:</strong> <%= item.service_description %></p>
+                </div>
+            <% }) %>
         </div>
-      <% } %>
-    </div>
-  </main>
-</body>
-</html>
+    <% } %>
+</main>

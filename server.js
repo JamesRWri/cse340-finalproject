@@ -17,11 +17,13 @@ dotenv.config();
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
 
 app.use(morgan('dev'));
-app.use(express.static('./public'));
+app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({

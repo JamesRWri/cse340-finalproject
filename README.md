@@ -5,7 +5,7 @@ A fully functional, database-driven web application built as the final project f
 ---
 
 ## 🔗 Live Deployment
-* **Live Site on Render:** [[Insert Live Render URL Here](https://cse340-dealership-final-project.onrender.com/)]
+* **Live Site on Render:** [https://cse340-dealership-final-project.onrender.com/](https://cse340-dealership-final-project.onrender.com/)]
 
 ---
 
